@@ -28,7 +28,7 @@ public class MdcAwareForkJoinPool extends ForkJoinPool {
 
     @Override
     public <T> List<Future<T>> invokeAll(Collection<? extends Callable<T>> tasks) {
-        return super.invokeAll(tasks);
+        return super.invokeAll(wrapWithMdcContext(tasks));
     }
 
     @Override
