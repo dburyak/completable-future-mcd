@@ -42,10 +42,17 @@ public class CompletableFutureTest {
                         log.info("stage 2 : {}", txid);
                         return "stage 2 : " + txid;
                     })
-                    .thenCompose(s -> CompletableFuture.supplyAsync(() -> {
-                        log.info("stage 3 : {}", txid);
-                        return "stage 3 : " + txid;
-                    }))
+                    .thenCompose(s -> {
+                        // a pretty reasonable use of CF
+                        // (e.g. could happen in an external library or framework)
+                        // breaks the transaction logging for future steps:
+                        var rv = new CompletableFuture<String>();
+                        exec.submit(() -> {
+                            log.info("stage 3 : {}", txid);
+                            rv.complete("stage 3 : " + txid);
+                        });
+                        return rv;
+                    })
                     .thenCompose(s -> CompletableFuture.supplyAsync(() -> {
                         log.info("stage 4 : {}", txid);
                         return "stage 4 : " + txid;
