@@ -7,9 +7,7 @@ Configuration:
       PatternLayout:
         Pattern: "%style{\
             %date{yyyy-MM-dd HH:mm:ss.SSS}\
-            }{white} \
-            \
-            [%mdc{txid}] \
+            } \
             \
             %highlight{%-5level}{FATAL=Blinking bright red, ERROR=Red, WARN=Yellow, INFO=Cyan, DEBUG=White, TRACE=Black} \
             \
@@ -20,7 +18,7 @@ Configuration:
             %style{\
             %40.40logger\
             }{cyan} - \
-            \
+            [MDC TX %mdc{txid}] \
             %msg%n%throwable\
             "
   Loggers:
