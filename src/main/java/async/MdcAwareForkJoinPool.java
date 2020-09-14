@@ -6,6 +6,7 @@ import java.util.concurrent.Callable;
 import java.util.concurrent.ForkJoinPool;
 import java.util.concurrent.ForkJoinTask;
 import java.util.concurrent.Future;
+import java.util.stream.Collectors;
 
 import static async.MdcWrapperHelper.wrapWithMdcContext;
 
@@ -28,7 +29,7 @@ public class MdcAwareForkJoinPool extends ForkJoinPool {
 
     @Override
     public <T> List<Future<T>> invokeAll(Collection<? extends Callable<T>> tasks) {
-        return super.invokeAll(wrapWithMdcContext(tasks));
+        return super.invokeAll(wrapWithMdcContext(tasks.stream().map(it -> (Callable<T>)it).collect(Collectors.toList())));
     }
 
     @Override
